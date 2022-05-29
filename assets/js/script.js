@@ -203,27 +203,22 @@ var saveTasks = function() {
 }
 
 var loadTasks = function () {
-    var getTasks = localStorage.getItem("tasks")
-    JSON.parse(getTasks)
-    for (var i = 0; i < tasks.length; i++) {
-        var listItemEl = document.createElement("li")
-        listItemEl.className = "task-item"
-        listItemEl.setAttribute("data-task-id", taskIdCounter)
-    
-        var taskInfoEl = document.createElement("div")
-        taskInfoEl.className = "task-info"
-        taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>"
-        listItemEl.appendChild(taskInfoEl)
-        
-        var taskActionEl = createTaskActions(taskIdCounter)
-        listItemEl.appendChild(taskActionEl)
-        tasksToDoEl.appendChild(listItemEl)
+    var savedTasks = localStorage.getItem("tasks")
+    if (!savedTasks) {
+        return false
+    }
+    console.log("Saved tasks found!")
+
+    savedTasks = JSON.parse(savedTasks)
+
+    for (var i = 0; i < savedTasks.length; i++) {
+        createTaskEl(savedTasks[i])
     }
 
-
 }
-console.log(loadTasks())
 
 formEl.addEventListener("submit", taskFormHandler)
 pageContentEl.addEventListener("click", taskButtonHandler)
 pageContentEl.addEventListener("change", taskStatusChangeHandler)
+
+loadTasks()
